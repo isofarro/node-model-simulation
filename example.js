@@ -1,11 +1,13 @@
 var pulse   = require('./lib/pulse'),
-	myPulse = new pulse.Pulse();
+	myPulse = new pulse.Pulse(),
+	ticks   = 0;
 
-
-myPulse.start();
+myPulse.start()
+	.on('tick', function() { ticks++; console.log('tick-tock!'); })
+	.on('end',  function() { console.log('Ticks: ' + ticks); });
 
 
 setTimeout(function() {
 	myPulse.stop();
-}, 20000);
+}, 10000);
 
