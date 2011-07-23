@@ -1,5 +1,5 @@
 var pulse   = require('./lib/pulse'),
-	myPulse = new pulse.Pulse(),
+	myPulse = new pulse.Pulse({}),
 	ticks   = 0;
 
 myPulse
