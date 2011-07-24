@@ -40,9 +40,9 @@ an underflow event.
 The waterflow example uses the following events (in addition
 to those provided by `lib/pulse.js`:
 
-* 'overflow' -- when the water-container is overcapacity. This
+* `overflow` -- when the water-container is overcapacity. This
 	event passes the number of units spilt as an argument.
-* 'underflow' -- when the water-container runs dry. This event
+* `underflow` -- when the water-container runs dry. This event
 	passes the number of units short as an argument.
 	
 
