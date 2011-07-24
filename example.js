@@ -5,15 +5,11 @@ var pulse     = require('./lib/pulse'),
 	ticks     = 0;
 
 myPulse
-	//.config({ tickInterval: 1000, maxTicks: 10 })
-	.config({ tickInterval: 1000 })
-	//.on('tick', function() { ticks++; console.log('tick-tock!'); })
-	.on('end',  function() { console.log('Ticks: ' + ticks); })
+	.config({ tickInterval: 1000, maxTicks: 10 })
+	.on('end',  function() { console.log('Ticks: ' + myPulse.ticks); })
 	.on('tick', function() { myModel.tick() })
+	.on('end',  function() { console.log('Simulation completed'); })
 	.start();
 
 
-setTimeout(function() {
-	myPulse.stop();
-}, 10000);
 
