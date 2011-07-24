@@ -1,6 +1,7 @@
 /**
-	waterflow.js -- model a flow of water through a tank
+	waterflow.js -- model a flow of water through a container
 
+	@extends Model
 **/
 
 var sys    = require('sys'),
@@ -8,6 +9,7 @@ var sys    = require('sys'),
 
 
 var WaterFlow = function() {
+	var self = this;
 	if ( false === (this instanceof WaterFlow) ) {
 		return new WaterFlow();
 	}
@@ -17,6 +19,7 @@ var WaterFlow = function() {
 	this.in       = 10;
 	this.out      = 3;
 	this.waste    = 0;
+	this.shortage = 0;
 
 	// Call the superclass constructor
 	model.Model.call(this);
@@ -27,8 +30,9 @@ sys.inherits(WaterFlow, model.Model);
 
 WaterFlow.prototype.status = function() {
 	var self = this;
-	return 'Water level: ' + self.level + '/' + self.capacity + 
-		( self.waste?' [Wasted: '+self.waste+']':'' );
+	return 'Water level: ' + self.level + '/' + self.capacity 
+		+ ( self.waste?' [Wasted: '+self.waste+']':'' )
+		+ ( self.shortage?' [Shortage: '+self.shortage+']':'' );
 };
 
 
@@ -39,9 +43,17 @@ WaterFlow.prototype.startHandler = function() {
 			self.waste += amount;
 		})
 		.on('underflow', function(amount) {
-			console.log('Water shortage: ' + amount);
+			self.shortage += amount;
 		});
-}
+
+	if (self.conf) {
+		self.capacity = self.conf.capacity     || self.capacity;
+		self.level    = self.conf.initialLevel || self.level;
+		self.in       = self.conf.flowIn       || self.in;
+		self.out      = self.conf.flowOut      || self.out;
+	}
+	
+};
 
 
 WaterFlow.prototype.tickHandler = function(obj) {
