@@ -4,8 +4,8 @@
 **/
 
 var sys    = require('sys'),
-	model  = require('../lib/model'),
-	events = require('events');
+	model  = require('../lib/model');
+
 
 var WaterFlow = function() {
 	if ( false === (this instanceof WaterFlow) ) {
@@ -14,25 +14,37 @@ var WaterFlow = function() {
 
 	this.capacity = 50;
 	this.level    = 17;
-	this.in       = 11;
-	this.out      = 7;
+	this.in       = 10;
+	this.out      = 3;
 	this.waste    = 0;
 
-	//model.Model.call(this);
-	events.EventEmitter.call(this);
+	// Call the superclass constructor
+	model.Model.call(this);
 };
 
-//sys.inherits(WaterFlow, model.Model);
 sys.inherits(WaterFlow, model.Model);
+
 
 WaterFlow.prototype.status = function() {
 	var self = this;
 	return 'Water level: ' + self.level + '/' + self.capacity + 
-		( self.waste?'[>>'+self.waste+']':'' );
+		( self.waste?' [Wasted: '+self.waste+']':'' );
 };
 
 
-WaterFlow.prototype.tick = function(obj) {
+WaterFlow.prototype.startHandler = function() {
+	var self = this;
+	self
+		.on('overflow', function(amount) {
+			self.waste += amount;
+		})
+		.on('underflow', function(amount) {
+			console.log('Water shortage: ' + amount);
+		});
+}
+
+
+WaterFlow.prototype.tickHandler = function(obj) {
 	var self = this,
 		diff = self.in - self.out,
 		overflow;
@@ -50,10 +62,7 @@ WaterFlow.prototype.tick = function(obj) {
 		self.emit('underflow', overflow);
 	}
 
-
-	console.log(self.status());
 };
-
 
 
 exports.WaterFlow = WaterFlow;
