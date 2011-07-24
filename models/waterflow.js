@@ -14,7 +14,7 @@ var WaterFlow = function() {
 
 	this.capacity = 50;
 	this.level    = 17;
-	this.in       = 15;
+	this.in       = 11;
 	this.out      = 7;
 	this.waste    = 0;
 
